@@ -3,9 +3,13 @@ module.exports = function(grunt) {
 
   grunt.initConfig({
     wiredep: {
-      target: {
-        src: ['app/assets/themes/default/*'],
-        ignorePath: '../../shared/bower_components'
+      defaultTheme: {
+        src: ['app/assets/themes/default/layout.jade'],
+        ignorePath: '../../../../assets/shared/'
+      },
+      config: {
+        src: ['app/setupassets/views/layout.jade'],
+        ignorePath: '../../../assets/shared/'
       }
     }
   })
