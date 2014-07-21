@@ -1,0 +1,19 @@
+{
+  "name": "bleep",
+  "version": "0.1.0",
+  "authors": [
+    "Mike Zhang"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "~1.2.20"
+  }
+}

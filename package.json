@@ -1,0 +1,35 @@
+{
+  "name": "bleep",
+  "version": "0.1.0",
+  "description": "A simple blog engine for complex people.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/bayofpigs/bleep"
+  },
+  "keywords": [
+    "blog",
+    "node"
+  ],
+  "author": "Mike Zhang",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/bayofpigs/bleep/issues"
+  },
+  "homepage": "https://github.com/bayofpigs/bleep",
+  "dependencies": {
+    "express": "~4.6.0",
+    "mongoose": "~3.8.12",
+    "markdown": "~0.5.0",
+    "mongodb": "~1.4.7",
+    "async": "~0.9.0",
+    "serve-favicon": "~2.0.1"
+  },
+  "devDependencies": {
+    "grunt": "~0.4.5",
+    "grunt-wiredep": "~1.8.0"
+  }
+}
