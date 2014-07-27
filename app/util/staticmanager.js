@@ -40,18 +40,58 @@ Statics.add = function(app, path, dirName) {
   app.use(dirName, express.static(path));
 
   // The stack
-  var statics = app._router.stack;
-  var index = -1;
-  
+  var stack = app._router.stack;
+
+  var firstStaticIndex;
+  var thisStaticIndex;
+  for (var i = 0; i < stack.length; i++) {
+    var middleware = stack[i];
+
+    if (middleware.handle.name === "staticMiddleware") {
+      if (!firstStaticIndex) firstStaticIndex = i;
+
+      if (middleware.regexp.toString() === getRegexpName(dirName)) {
+        thisStaticIndex = i;
+      }
+    }
+  }
+
+  // Assumes the first static index is added before the application starts
+  // If this index is not the first, pop this guy off from wherever he is
+  // and place him right next to the first guy
+  if (firstStaticIndex != thisStaticIndex) {
+    var thisStatic = stack.splice(thisStaticIndex, 1);
+    stack.splice(firstStatic + 1, thisStatic);
+  }
 };
+
+/*
+ * Utility to check if a given statics dirName is currently defined.
+ * @dirName The express directory name of the static
+ */
+Statics.defined = function(app, dirName) {
+  var statics = app._router.stack;
+
+  for (var i = 0; i < statics.length; i++) {
+    var middleware = statics[i];
+
+    if (middleware.handle.name === "staticMiddleware" &&
+      middleware.regexp.toString() === getRegexpName(dirName)) {
+
+      return true;
+    }
+  }
+
+  return false;
+}
 
 /*
  * Utility for removing an express.static() path, or the inverse
  * of Statics.
  * @param app = the express app to perform the removal on
- * @param pathname = the static path to perform the removal on
+ * @param dirName = the static path to perform the removal on
  */
-Statics.purge = function(app, path) {
+Statics.purge = function(app, dirName) {
   // reference to app statics
   var statics = app._router.stack;
   var index = -1;
@@ -59,7 +99,7 @@ Statics.purge = function(app, path) {
     var middleware = statics[i];
 
     if (middleware.handle.name === "staticMiddleware" && 
-      middleware.regexp.toString() === getRegexpName(path)) {
+      middleware.regexp.toString() === getRegexpName(dirName)) {
       var index = i;
       break;
     }
