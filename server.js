@@ -5,10 +5,7 @@ var app = express();
 
 require('./app/initialize')(app);
 
-// Todo: figure out how to remove stuff from the stack
-console.log(app._router.stack);
-
-// Check if configuration exists
+// Check if the configuration file exists
 fs.exists('./config.json', function(configExists) { 
   // Exists configuration. 
   if (configExists) {

@@ -26,7 +26,6 @@ module.exports = function(app, callback) {
     function setUpAppfunction(db, cb) {
       // uncomment once favicon is configured
       // app.use(favicon(__dirname + '/assets/shared/favicon.ico'));
-      app.use(express.static(path.join(__dirname, 'assets/shared')));
 
 
       cb(null, app);

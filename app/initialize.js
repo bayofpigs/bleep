@@ -1,14 +1,23 @@
 var path = require('path');
 var express = require('express');
+var session = require('express-session');
+var morgan = require('morgan');
 
 // Universal configuration settings
 module.exports = function(app) {
+  
   app.set('view engine', 'jade');
 
-
   // ----------- Universal statics --------------
-  app.use(express.static(path.join(__dirname, 'assets/shared/')));
-  app.use(express.static(path.join(__dirname, 'assets/themes/default/static')));
+  app.use(express.static(path.join(__dirname, 'assets/shared')));
+  app.use('/setup', express.static(path.join(__dirname, 'setupassets/public')));
+
+  // ----------- Other middleware
+  
+  app.use(session({secret: "BleepBleepBleep", 
+                   resave: true,
+                   saveUninitialized: true}))
+  app.use(morgan('combined'));
 
   // ----------- Error Handlers ---------------
   // Catch 404 errors
