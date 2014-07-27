@@ -18,6 +18,10 @@ var getRegexpName = function(pathName) {
     pathName = pathName.replace("\/", "\\\/");
   }
 
+  if (pathName.charAt(pathName.length - 1) == "\/") {
+    pathName = pathName.substring(0, pathName.length - 1);
+  }
+
   // /^\/setup\/?(?=\/|$)/i
   return "\/^" + pathName + "\\\/?(?=\\\/|$)\/i";
 };
@@ -38,7 +42,7 @@ Statics.add = function(app, path, dirName) {
   // The stack
   var statics = app._router.stack;
   var index = -1;
-
+  
 };
 
 /*
@@ -53,9 +57,6 @@ Statics.purge = function(app, path) {
   var index = -1;
   for (var i = 0; i < statics.length; i++) {
     var middleware = statics[i];
-
-    console.log(middleware.regexp);
-    console.log(getRegexpName(path));
 
     if (middleware.handle.name === "staticMiddleware" && 
       middleware.regexp.toString() === getRegexpName(path)) {
