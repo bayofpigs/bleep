@@ -14,12 +14,12 @@ var getRegexpName = function(pathName) {
   pathName = pathName.trim();
 
   // Remove header
-  if (pathName.charAt(0) === "/") {
-    pathName = pathName.substring(1);
+  if (pathName.charAt(0) === "\/") {
+    pathName = pathName.replace("\/", "\\\/");
   }
 
   // /^\/setup\/?(?=\/|$)/i
-  return "\/^\\\/" + pathName + "\\\/?=\\\/|$)\/i";
+  return "\/^" + pathName + "\\\/?(?=\\\/|$)\/i";
 };
 
 /*
@@ -53,6 +53,10 @@ Statics.purge = function(app, path) {
   var index = -1;
   for (var i = 0; i < statics.length; i++) {
     var middleware = statics[i];
+
+    console.log(middleware.regexp);
+    console.log(getRegexpName(path));
+
     if (middleware.handle.name === "staticMiddleware" && 
       middleware.regexp.toString() === getRegexpName(path)) {
       var index = i;

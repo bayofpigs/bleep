@@ -14,6 +14,7 @@ describe ('Statics', function() {
       var app1_stack = app1._router.stack;
       var app2_stack = app2._router.stack;
 
+      assert.equal(app1_stack.length, app2_stack.length);
       for (var i = 0; i < app1_stack.length; i++) {
         var mid1 = app1_stack[i];
         var mid2 = app2_stack[i];
@@ -38,17 +39,27 @@ describe ('Statics', function() {
       var app2 = express();
       app2.use("path", express.static("/dummydir"));
 
+      var app3 = express();
+      app3.use("path/", express.static("/dummydir"));
+
       var app1_stack = app1._router.stack;
       var app2_stack = app2._router.stack;
+      var app3_stack = app3._router.stack;
 
       statics.purge(app1, "/path");
-      statics.purge(app2, "/path");
+      statics.purge(app2, "path");
+      statics.purge(app3, "path/");
 
       var statics1_exists = false;
       var statics2_exists = false;
+      var statics3_exists = false;
+
+      assert.equal(app1_stack.length, app2_stack.length);
+      assert.equal(app1_stack.length, app3_stack.length);
       for (var i = 0; i < app1_stack.length; i++) {
         var mid1 = app1_stack[i];
         var mid2 = app2_stack[i];
+        var mid3 = app3_stack[i];
 
         if (mid1.handle.name === "staticMiddleware") {
           statics1_exists = true;
@@ -57,10 +68,15 @@ describe ('Statics', function() {
         if (mid2.handle.name === "staticMiddleware") {
           statics2_exists = true;
         }
+
+        if (mid3.handle.name === "staticMiddleware") {
+          statics3_exists = true;
+        }
       }
 
       assert.equal(statics1_exists, false);
       assert.equal(statics2_exists, false);
+      assert.equal(statics3_exists, false);
     })
   })
 });
