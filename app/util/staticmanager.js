@@ -18,11 +18,6 @@ var getRegexpName = function(pathName) {
     pathName = pathName.substring(1);
   }
 
-  // Remove footer
-  if (pathName.charAt(pathName.length - 1) === "/") {
-    pathName = pathName.substring(0, pathName.length - 1);
-  }
-
   // /^\/setup\/?(?=\/|$)/i
   return "\/^\\\/" + pathName + "\\\/?=\\\/|$)\/i";
 };
@@ -38,11 +33,12 @@ var getRegexpName = function(pathName) {
  */
 Statics.add = function(app, path, dirName) {
   // Add the static directory tot he stack
-  app.use(dirName, express.static('path'));
+  app.use(dirName, express.static(path));
 
   // The stack
   var statics = app._router.stack;
   var index = -1;
+
 };
 
 /*
@@ -58,7 +54,7 @@ Statics.purge = function(app, path) {
   for (var i = 0; i < statics.length; i++) {
     var middleware = statics[i];
     if (middleware.handle.name === "staticMiddleware" && 
-      middleware.regexp.toString().indexOf(path) > -1) {
+      middleware.regexp.toString() === getRegexpName(path)) {
       var index = i;
       break;
     }

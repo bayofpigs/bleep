@@ -9,7 +9,7 @@ describe ('Statics', function() {
       app1.use("/path", express.static("/dummydir"));
 
       var app2 = express();
-      statics.add(app2, "/dummydir", "path");
+      statics.add(app2, "/dummydir", "/path");
 
       var app1_stack = app1._router.stack;
       var app2_stack = app2._router.stack;
@@ -29,4 +29,44 @@ describe ('Statics', function() {
       }
     });
   });
+
+  describe ('Static deletion', function() {
+    it ("should remove statics correctly regardless of whether a slash is present", function() {
+      var app1 = express();
+      app1.use("/path", express.static("/dummydir"));
+
+      var app2 = express();
+      app2.use("path", express.static("/dummydir"));
+
+      var app1_stack = app1._router.stack;
+      var app2_stack = app2._router.stack;
+
+      statics.purge(app1, "/path");
+      statics.purge(app2, "/path");
+
+      var statics1_exists = false;
+      var statics2_exists = false;
+      for (var i = 0; i < app1_stack.length; i++) {
+        var mid1 = app1_stack[i];
+        var mid2 = app2_stack[i];
+
+        if (mid1.handle.name === "staticMiddleware") {
+          statics1_exists = true;
+        }
+
+        if (mid2.handle.name === "staticMiddleware") {
+          statics2_exists = true;
+        }
+      }
+
+      assert.equal(statics1_exists, false);
+      assert.equal(statics2_exists, false);
+    })
+  })
 });
+
+
+
+
+
+
