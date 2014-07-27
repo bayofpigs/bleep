@@ -10,7 +10,6 @@ module.exports = function(app) {
 
   // ----------- Universal statics --------------
   app.use(express.static(path.join(__dirname, 'assets/shared')));
-  app.use('/setup', express.static(path.join(__dirname, 'setupassets/public')));
 
   // ----------- Other middleware
   

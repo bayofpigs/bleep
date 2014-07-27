@@ -41,6 +41,7 @@ Statics.add = function(app, path, dirName) {
 
   // The stack
   var stack = app._router.stack;
+  console.log(stack);
 
   var firstStaticIndex;
   var thisStaticIndex;
@@ -60,9 +61,11 @@ Statics.add = function(app, path, dirName) {
   // If this index is not the first, pop this guy off from wherever he is
   // and place him right next to the first guy
   if (firstStaticIndex != thisStaticIndex) {
-    var thisStatic = stack.splice(thisStaticIndex, 1);
-    stack.splice(firstStatic + 1, thisStatic);
+    var thisStatic = stack.splice(thisStaticIndex, 1)[0];
+    stack.splice(firstStaticIndex + 1, 0, thisStatic);
   }
+
+  console.log(stack);
 };
 
 /*
