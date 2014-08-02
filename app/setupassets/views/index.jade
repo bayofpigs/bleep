@@ -1,0 +1,41 @@
+extends layout
+
+block content
+  p Welcome to Bleep!
+
+  p. 
+    To get you started, Bleep needs to ask you a few questions. It'll be quick, I promise!
+
+  hr
+
+  form(role="form")
+    h3 Who are you?
+    div.form-group
+      label(for="title") Blog title
+      input.form-control#title(type="text", name="title", placeholder="My Very Special Blog", required)
+    div.form-group
+      label(for="name") Your name
+      input.form-control#name(type="text", name="name", placeholder="Firstname Lastname", required)
+    div.form-group
+      label(for="password") Administrator password
+      input.form-control#password(type="password", name="password", placeholder="Password", required)
+    div.form-group
+      label(for="passwordconfirm") Confirm password
+      input.form-control#passwordconfirm(type="password", name="passwordconfirm", placeholder="Password, again", required)
+
+    hr
+
+    h3 Where is your mongod now?
+
+    div.form-group
+      label(for="host") Host 
+      input.form-control#host(type="text", name="mongohost", placeholder="Hostname", required)
+    div.form-group
+      label(for="port") Port 
+      input.form-control#port(type="text", name="port", placeholder="Port Number", required)
+    div.form-group
+      label(for="database") Database name
+      input.form-control#port(type="text", name="database", placeholder="Database Name", required)
+    button.btn.btn-default(type="submit") Done!
+
+

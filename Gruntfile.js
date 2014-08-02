@@ -5,11 +5,11 @@ module.exports = function(grunt) {
     wiredep: {
       defaultTheme: {
         src: ['app/assets/themes/default/layout.jade'],
-        ignorePath: '../../../../assets/shared/'
+        ignorePath: '../../shared'
       },
       config: {
         src: ['app/setupassets/views/layout.jade'],
-        ignorePath: '../../../assets/shared/'
+        ignorePath: '../../assets/shared'
       }
     }
   })

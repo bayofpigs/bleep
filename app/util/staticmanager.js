@@ -34,7 +34,7 @@ var regexpCoorespondsToDirname = function(dirName, regex) {
   } 
 
   return getRegexp(dirName) === regex.toString();
-}
+};
 
 /*
  * Utility for adding an express.static() path to the 
@@ -51,7 +51,6 @@ Statics.add = function(app, path, dirName) {
 
   // The stack
   var stack = app._router.stack;
-  console.log(stack);
 
   var firstStaticIndex;
   var expressInitIndex;
@@ -91,7 +90,7 @@ Statics.defined = function(app, dirName) {
     var middleware = statics[i];
 
     if (middleware.handle.name === "staticMiddleware" &&
-      middleware.regexp.toString() === getRegexpName(dirName)) {
+      regexpCoorespondsToDirname(dirName, middleware.regexp)) {
 
       return true;
     }
@@ -102,7 +101,7 @@ Statics.defined = function(app, dirName) {
 
 /*
  * Utility for removing an express.static() path, or the inverse
- * of Statics.
+ * of Statics.add.
  * @param app = the express app to perform the removal on
  * @param dirName = the static path to perform the removal on
  */

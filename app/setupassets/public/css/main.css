@@ -2,7 +2,6 @@
 body {
   padding-top: 20px;
   padding-bottom: 20px;
-  font-size: x-large;
   font-family: 'Arvo';
 }
 
@@ -14,6 +13,7 @@ h1 {
 .header {
   padding-right: 15px;
   padding-left: 15px;
+  color: #5785C2;
 }
 
 /* Custom page header */
