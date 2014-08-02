@@ -101,10 +101,14 @@ Statics.purge = function(app, dirName) {
   for (var i = 0; i < statics.length; i++) {
     var middleware = statics[i];
 
-    if (middleware.handle.name === "staticMiddleware" && 
-      middleware.regexp.toString() === getRegexpName(dirName)) {
-      var index = i;
-      break;
+    if (middleware.handle.name === "staticMiddleware") {
+      if (middleware.regexp.toString() === getRegexpName(dirName)) {
+        var index = i;
+        break;
+      } else if (dirName === "\/" && middleware.regexp.fast_slash) {
+        var index = i;
+        break;
+      }
     }
   }
 

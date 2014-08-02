@@ -1,6 +1,8 @@
 var path = require('path');
 var express = require('express');
 var statics = require('./util/staticmanager');
+var setupRoutes = require('./routes/setup');
+var indexRoutes = require('./routes/index');
 
 /*
  * Configure routes, static assets and middleware to serve up the
@@ -12,7 +14,8 @@ module.exports = function(app, callback) {
   // Temporary static files directory
   //app.use('/setup', express.static(path.join(__dirname, 'setupassets/public')));
   statics.add(app, path.join(__dirname, 'setupassets/public'), '/setup');
-  
+  app.use('/', setupRoutes);
+  app.use('/index', indexRoutes);
   console.log(app._router.stack);
 
   callback(null);
