@@ -95,9 +95,3 @@ describe ('Statics', function() {
     })
   })
 });
-
-
-
-
-
-

@@ -4,11 +4,13 @@
  * and is based on an understanding of the underlying 
  * structure of Express. It may be subject to change with
  * future updates to the framework.
+ *
+ * NOTE2: This library is in large part a duplicate of 
+ * staticmanager.js
  */
 
 var express = require('express');
-
-var Statics = {};
+var Routes = {};
 
 var getRegexpName = function(pathName) {
   pathName = pathName.trim();
@@ -22,6 +24,15 @@ var getRegexpName = function(pathName) {
     pathName = pathName.substring(0, pathName.length - 1);
   }
 
-  // /^\/setup\/?(?=\/|$)/i
   return "\/^" + pathName + "\\\/?(?=\\\/|$)\/i";
 }
+
+/*
+ * Utility for adding an express.static() path to the 
+ * middleware stack after the application is listening.
+ * Statics cannot be added after the server has started
+ * as the error-handling middleware would be placed before.
+ * @param path = the full path of the static directory
+ * @param dirName = the "directory" associated with the path
+ *                  to be used in views
+ */

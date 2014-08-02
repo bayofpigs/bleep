@@ -9,8 +9,9 @@ var express = require('express');
 
 var Statics = {};
 
-/* Helper method */
-var getRegexpName = function(pathName) {
+/* Helper method. Generate the expected regex from a given
+ * path name                                                */
+var getRegexp = function(pathName) {
   pathName = pathName.trim();
 
   // Remove header
@@ -25,6 +26,15 @@ var getRegexpName = function(pathName) {
   // /^\/setup\/?(?=\/|$)/i
   return "\/^" + pathName + "\\\/?(?=\\\/|$)\/i";
 };
+
+/* Compare two express static regex */
+var regexpCoorespondsToDirname = function(dirName, regex) {
+  if (dirName === "/" && regex.fast_slash) {
+    return true;
+  } 
+
+  return getRegexp(dirName) === regex.toString();
+}
 
 /*
  * Utility for adding an express.static() path to the 
@@ -44,28 +54,30 @@ Statics.add = function(app, path, dirName) {
   console.log(stack);
 
   var firstStaticIndex;
+  var expressInitIndex;
   var thisStaticIndex;
   for (var i = 0; i < stack.length; i++) {
     var middleware = stack[i];
 
-    if (middleware.handle.name === "staticMiddleware") {
+    if (middleware.handle.name === "expressInit") {
+      expressInitIndex = i;
+    } else if (middleware.handle.name === "staticMiddleware") {
       if (!firstStaticIndex) firstStaticIndex = i;
 
-      if (middleware.regexp.toString() === getRegexpName(dirName)) {
+      if (regexpCoorespondsToDirname(dirName, middleware.regexp)) {
         thisStaticIndex = i;
       }
     }
   }
 
-  // Assumes the first static index is added before the application starts
-  // If this index is not the first, pop this guy off from wherever he is
-  // and place him right next to the first guy
+  var spliceIndex = expressInitIndex + 1;
   if (firstStaticIndex != thisStaticIndex) {
-    var thisStatic = stack.splice(thisStaticIndex, 1)[0];
-    stack.splice(firstStaticIndex + 1, 0, thisStatic);
-  }
+    spliceIndex = firstStaticIndex + 1;
+    
+  } 
 
-  console.log(stack);
+  var thisStatic = stack.splice(thisStaticIndex, 1)[0];
+  stack.splice(spliceIndex, 0, thisStatic);
 };
 
 /*
@@ -101,14 +113,11 @@ Statics.purge = function(app, dirName) {
   for (var i = 0; i < statics.length; i++) {
     var middleware = statics[i];
 
-    if (middleware.handle.name === "staticMiddleware") {
-      if (middleware.regexp.toString() === getRegexpName(dirName)) {
-        var index = i;
-        break;
-      } else if (dirName === "\/" && middleware.regexp.fast_slash) {
-        var index = i;
-        break;
-      }
+    if (middleware.handle.name === "staticMiddleware" &&
+      regexpCoorespondsToDirname(dirName, middleware.regexp)) {
+
+      var index = i;
+      break;
     }
   }
 
