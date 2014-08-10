@@ -5,11 +5,18 @@ module.exports = function(grunt) {
     wiredep: {
       defaultTheme: {
         src: ['app/assets/themes/default/layout.jade'],
-        ignorePath: '../../shared'
+        ignorePath: '../../shared',
+        exclude: ['medium-editor', 'medium-editor-insert-plugin']
       },
-      config: {
+      setup: {
         src: ['app/setupassets/views/layout.jade'],
-        ignorePath: '../../assets/shared'
+        ignorePath: '../../assets/shared',
+        exclude: ['medium-editor', 'medium-editor-insert-plugin']
+      },
+      editor: {
+        src: ['app/assets/themes/default/editor.jade'],
+        ignorePath: '../../shared',
+        exclude: ['angular', 'bootstrap', 'jquery']
       }
     }
   })

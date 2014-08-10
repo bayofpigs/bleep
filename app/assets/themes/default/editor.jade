@@ -1,0 +1,17 @@
+extends layout
+
+block content
+  p This is the editor.
+
+block pagecss
+  // bower:css
+  link(rel='stylesheet', href='/bower_components/medium-editor/dist/css/medium-editor.css')
+  link(rel='stylesheet', href='/bower_components/medium-editor/dist/css/themes/default.css')
+  link(rel='stylesheet', href='/bower_components/medium-editor-insert-plugin/dist/css/medium-editor-insert-plugin.css')
+  // endbower
+
+block pagejavascript
+  // bower:js
+  script(src='/bower_components/medium-editor/dist/js/medium-editor.js')
+  script(src='/bower_components/medium-editor-insert-plugin/dist/js/medium-editor-insert-plugin.all.js')
+  // endbower

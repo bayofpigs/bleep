@@ -15,6 +15,7 @@ router.get('/', function(req, res) {
   res.redirect('/setup');
 });
 
+
 router.post('/setup', function(req, res) {
   console.log(req.body);
 });
