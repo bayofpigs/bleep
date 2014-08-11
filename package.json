@@ -31,6 +31,7 @@
     "express-session": "~1.7.1",
     "morgan": "~1.2.1",
     "body-parser": "~1.5.2",
+    "validator": "~3.17.0"
   },
   "devDependencies": {
     "grunt": "~0.4.5",

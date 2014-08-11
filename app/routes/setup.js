@@ -4,6 +4,10 @@
 
 var express = require('express');
 var router = express.Router();
+var bodyParser = require('body-parser');
+
+router.use(bodyParser.json());
+router.use(bodyParser.urlencoded({ extended: false }));
 
 /* GET setup page */
 router.get('/setup', function(req, res) {
@@ -18,6 +22,7 @@ router.get('/', function(req, res) {
 
 router.post('/setup', function(req, res) {
   console.log(req.body);
+  res.send("Derp");
 });
 
 module.exports = router;

@@ -22,6 +22,7 @@ block content
     div.form-group
       label(for="passwordconfirm") Confirm password
       input.form-control#passwordconfirm(type="password", name="passwordconfirm", placeholder="Password, again", required)
+      p.errorMessage Password confirm must match password
 
     hr
 
@@ -38,4 +39,6 @@ block content
       input.form-control#port(type="text", name="database", placeholder="Database Name", required)
     button.btn.btn-default(type="submit") Done!
 
+block pagejavascript
+  script(src="/setup/js/submit.js")
 

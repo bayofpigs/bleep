@@ -5,8 +5,9 @@ body {
   font-family: 'Arvo';
 }
 
-h1 {
-  font-size: 50px;
+.errorMessage {
+  display: none;
+  color: red;
 }
 
 /* Everything but the jumbotron gets side spacing for mobile first views */

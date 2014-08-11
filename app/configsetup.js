@@ -17,7 +17,7 @@ module.exports = function(app, callback) {
   statics.add(app, path.join(__dirname, 'setupassets/public'), '/setup');
   routes.add(app, setupRoutes, "/");
   
-  console.log(app._router.stack);
+  //console.log(app._router.stack);
 
   callback(null);
 }

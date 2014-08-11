@@ -2,7 +2,6 @@ var path = require('path');
 var express = require('express');
 var session = require('express-session');
 var morgan = require('morgan');
-var bodyParser = require
 
 // Universal configuration settings
 module.exports = function(app) {
