@@ -1,6 +1,6 @@
 var path = require('path');
 var appRoot = process.cwd();
-var config = require(path.join(appRoot, 'config.json').theme;
+var config = require(path.join(appRoot, 'config.json')).theme;
 
 var DEFAULT_THEME = "default";
 
