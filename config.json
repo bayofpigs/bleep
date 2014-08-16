@@ -1,0 +1,9 @@
+{
+    "title": "Mike",
+    "database": {
+        "host": "localhost",
+        "port": "27017",
+        "db": "Bleep"
+    },
+    "themes": "assets/themes"
+}

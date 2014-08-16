@@ -1,18 +1,22 @@
 /* 
- * Routes for setup page
+ * Routes for the blog index
  */
 
 var express = require('express');
-var router = express.Router();
+var Router = express.Router;
 
-/* GET setup page */
-router.get('/posts', function(req, res) {
-  res.send("This is posts page");
-});
+module.exports = function() {
+  var router = Router();
 
-/* Redirect route to setup page */
-router.get('/', function(req, res) {
-  res.redirect('/posts');
-});
+  /* GET setup page */
+  router.get('/posts', function(req, res) {
+    res.send("This is posts page");
+  });
 
-module.exports = router;
+  /* Redirect route to setup page */
+  router.get('/', function(req, res) {
+    res.redirect('/posts');
+  });
+
+  return router;
+};

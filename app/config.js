@@ -5,6 +5,10 @@ var express = require('express');
 var favicon = require('serve-favicon');
 var MongoClient = require('mongodb').MongoClient;
 var format = require('util').format;
+var indexRouter = require('./routes/index');
+var adminRouter = require('./routes/admin');
+var authentication = require('./util/authentication');
+var routes = require('./util/routesmanager')
 
 // Theme configuration settings once database instance is defined
 module.exports = function(app, callback, database) {
@@ -17,7 +21,7 @@ module.exports = function(app, callback, database) {
 
         theme.fetchTheme(db, function(fetchedTheme) {
           theme.setTheme(fetchedTheme || "default", app, function(err) {
-            cb(db);
+            cb(null, db);
           });
         });
 
@@ -31,7 +35,7 @@ module.exports = function(app, callback, database) {
           db = database;
           theme.fetchTheme(db, function(fetchedTheme) {
             theme.setTheme(fetchedTheme || "default", app, function(err) {
-              cb(db);
+              cb(null, db);
             });
           });
       });
@@ -39,7 +43,10 @@ module.exports = function(app, callback, database) {
     function setupAppRoutes(db, cb) {
       // uncomment once favicon is configured
       // app.use(favicon(__dirname + '/assets/shared/favicon.ico'));
-      
+      index = indexRouter(db);
+      admin = adminRouter(db);
+      routes.add(app, admin, "/admin");
+      routes.add(app, index, "/");
 
       cb(null, app);
     }

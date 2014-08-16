@@ -101,6 +101,12 @@ module.exports = function(db, options) {
     req.logOut = function() {
       req.session.admin = false;
     };
+
+    req.isAuthenticated = function() {
+      return req.session.admin === true;
+    };
+    
+    next();
   };
 
   exports.savePassword = saveAdministratorPassword;

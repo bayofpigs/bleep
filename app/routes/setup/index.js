@@ -94,11 +94,18 @@ module.exports = function(app, indexRoutes) {
         return next(err);
       }
 
-      
+      console.log("Purging index route");
+      routesManager.purge(app, "/");
+      require('../../config')(app, function(err) {
+        if (err) { 
+          console.error("An error occured: " + err);
+          return next(err);
+        }
+
+        console.log("Mission completed");
+        res.redirect("/");
+      }, db);
     });
-
-
-    res.send("Derp");
   });
 
   return router;
