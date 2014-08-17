@@ -1,0 +1,98 @@
+var mongo = require('mongodb').MongoClient;
+
+module.exports = function(db) {
+
+  function getNextPostId(callback) {
+    var counters = db.collection('counters');
+    var ret = counters.findAndModify(
+      {_id: "postid"}, [],
+      {$inc: { seq: 1 }}, {},
+      function(err, doc) {
+      callback(err, doc.seq);
+    });
+  }
+
+  var Post = function(title, content, comments) {
+    this.comments = [];
+    if (comments) {
+      for (var i = 0; i < comments.length; i++) {
+        this.comments[i] = comments[i];
+      }
+    }
+
+    this.content = content;
+    this.title = title;
+  };
+
+  Post.fetchById = function(id, callback) {
+    if (!id || id <= 0) {
+      callback(new Error("Post: Incorrect id parameter: " + id));
+    }
+
+    var posts = db.collection('posts');
+    posts.find({_id: id}, function(err, doc) {
+      if (err) {
+        return callback(err);
+      }
+
+      var post = new Post(doc.title, doc.content, doc.comments);
+      post.id = id;
+
+      callback(null, post);
+    })
+  };
+
+  Post.prototype.delete = function(callback) {
+    if (!this.id) {
+      callback(new Error("Post: Undefined post id in delete operation"));
+    }
+    var posts = db.collection('posts');
+    posts.remove({id: this.id}, {w: 1}, function(err) {
+      callback(err);
+    });
+  };
+
+  Post.prototype.addComment = function(comment) {
+    this.comments.push(comment);
+  };
+
+  Post.prototype.save = function(callback) {
+    var posts = db.collection('posts');
+    var cur = this;
+
+    if(!cur.id) {
+      getNextPostId(function(err, nextId) {
+        if (err) {
+          return callback(err);
+        }
+
+        posts.insert({_id: nextId, 
+          content: cur.content,
+          title: cur.title,
+          dateModified: new Date() },
+          function(err, docs) {
+            if (err) {
+              return callback(err);
+            }
+
+            callback(null, nextId);
+          });
+      });
+    } else {
+      posts.update({_id: cur.id}, 
+        { $set: {content: cur.content, 
+                title: cur.title,
+                dateModified: new Date() }},
+        {w: 1}, 
+        function(err) {
+          if (err) {
+            return callback(err);
+          }
+
+          callback(null, cur.id);
+        });
+    }
+  };
+
+  return Post;
+};

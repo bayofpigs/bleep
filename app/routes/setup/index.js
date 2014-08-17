@@ -27,7 +27,6 @@ module.exports = function(app, indexRoutes) {
     res.redirect('/setup');
   });
 
-
   router.post('/setup', function(req, res, next) {
     console.log(req.body);
     var mongoHost = req.body.mongohost;
@@ -43,7 +42,7 @@ module.exports = function(app, indexRoutes) {
           var configuration = db.collection("configuration");
 
           async.parallel([
-            function insertBlogInformation(cb) {
+            function insertBlogInformationConfiguration(cb) {
               configuration.update({type: "bloginfo"}, 
                 {$set: {title: req.body.title, author: req.body.name}},
                 {upsert: true},
@@ -51,7 +50,7 @@ module.exports = function(app, indexRoutes) {
                 return cb(err);
               });
             },
-            function insertOtherInformation(cb) {
+            function insertOtherInformationConfiguration(cb) {
               configuration.update({type: "settings"},
                 {$set: {theme: "default"}},
                 {upsert: true},
@@ -63,6 +62,16 @@ module.exports = function(app, indexRoutes) {
           function(err) {
             return callback(err);
           });
+        });
+      },
+      function addIncrementingCountersToDatabase(callback) {
+        var counters = db.collection('counters');
+        counters.insert({_id: "postid", seq: 0}, function(err) {
+          if (err) {
+            return callback(err);
+          }
+
+          return callback(null);
         });
       },
       function registerAdminUser(callback) {
@@ -89,7 +98,7 @@ module.exports = function(app, indexRoutes) {
         });
       }
     ],
-    function(err) {
+    function uponCompletionOfAllSetupTasks(err) {
       if (err) {
         return next(err);
       }
