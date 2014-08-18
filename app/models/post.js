@@ -24,13 +24,30 @@ module.exports = function(db) {
     this.title = title;
   };
 
+  Post.fetchAll = function(callback) {
+    var posts = db.collection('posts');
+    posts.find().toArray(function(err, result) {
+      if (err) {
+        callback(err);
+      }
+
+      var posts = [];
+      for (var i = 0; i < result.length; i++) {
+        var doc = result[i];
+        posts[i] = new Post(doc.title, doc.content, doc.comments);
+      }
+
+      callback(null, posts);
+    });
+  };
+
   Post.fetchById = function(id, callback) {
-    if (!id || id <= 0) {
+    if (id < 0) {
       callback(new Error("Post: Incorrect id parameter: " + id));
     }
 
     var posts = db.collection('posts');
-    posts.find({_id: id}, function(err, doc) {
+    posts.findOne({_id: id}, function(err, doc) {
       if (err) {
         return callback(err);
       }
@@ -69,6 +86,7 @@ module.exports = function(db) {
         posts.insert({_id: nextId, 
           content: cur.content,
           title: cur.title,
+          comments: cur.comments,
           dateModified: new Date() },
           function(err, docs) {
             if (err) {
@@ -82,6 +100,7 @@ module.exports = function(db) {
       posts.update({_id: cur.id}, 
         { $set: {content: cur.content, 
                 title: cur.title,
+                comments: cur.comments,
                 dateModified: new Date() }},
         {w: 1}, 
         function(err) {

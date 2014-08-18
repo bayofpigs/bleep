@@ -10,7 +10,7 @@ var commentAuthors = ["l33th4x0r24", "sassysass", "derpmanalpha", "funnyguy28"];
 
 // Helper methods
 var getTitle = function() {
-  return titles[Math.floor(Math.random() * content.length)];
+  return titles[Math.floor(Math.random() * titles.length)];
 };
 
 var getContent = function() {
@@ -18,7 +18,7 @@ var getContent = function() {
 };
 
 var getAuthor = function() {
-  return commentAuthors[Math.floor(Math.random() * content.length)];
+  return commentAuthors[Math.floor(Math.random() * commentAuthors.length)];
 };
 
 var getComments = function() {
@@ -83,7 +83,7 @@ describe('Posts:', function() {
     });
   });
 
-  describe('New post save works as expected, without error.', function() {
+  describe('New post save works as expected, without error and is correct.', function() {
     var title = getTitle();
     var content = getContent();
     var comments = getComments();
@@ -94,8 +94,36 @@ describe('Posts:', function() {
         done(err);
       });
     });
+
+    it ('Should save with the correct values, with the correct id', function(done) {
+      Post.fetchById(0, function(err, post) {
+        if (err) {
+          console.log("BIG TROUBLE");
+          console.log(err);
+          done(err);
+        }
+
+        console.log("Post: " + post);
+        console.log(post);
+
+        assert.equal(0, post.id);
+        assert.equal(title, post.title);
+        assert.equal(content, post.content);
+
+        console.log(comments);
+        console.log(post.comments);
+
+        assert.deepEqual(comments, post.comments);
+        done();
+      });
+    })
   });
 });
+
+
+
+
+
 
 
 
