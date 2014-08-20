@@ -35,6 +35,7 @@ module.exports = function(db) {
       for (var i = 0; i < result.length; i++) {
         var doc = result[i];
         posts[i] = new Post(doc.title, doc.content, doc.comments);
+        posts[i].id = doc._id;
       }
 
       callback(null, posts);

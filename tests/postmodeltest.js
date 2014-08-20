@@ -3,7 +3,7 @@ var async = require('async');
 var MongoClient = require('mongodb').MongoClient;
 var util = require('util');
 
-
+// Useful for helper methods
 var titles = ["Derp", "Troll", "d00d wai u hex", "Over 9000", "Trolololol", "git rekt"];
 var content = ["Derp Derp Derp", "ur funny", "so troll", "swag", "yolo"];
 var commentAuthors = ["l33th4x0r24", "sassysass", "derpmanalpha", "funnyguy28"];
@@ -39,6 +39,8 @@ var getComments = function() {
 // Tests
 describe('Posts:', function() {
   var Post;
+  var database;
+
   before (function(done) {
     var testdbinfo = require('./testdatabaseconfig.json');
     var host = testdbinfo.hostname;
@@ -49,6 +51,8 @@ describe('Posts:', function() {
         if (err) {
           return done(err);
         }
+
+        database = db;
 
         // Clear the database
         db.dropDatabase(function(err) {
@@ -98,26 +102,63 @@ describe('Posts:', function() {
     it ('Should save with the correct values, with the correct id', function(done) {
       Post.fetchById(0, function(err, post) {
         if (err) {
-          console.log("BIG TROUBLE");
-          console.log(err);
           done(err);
         }
-
-        console.log("Post: " + post);
-        console.log(post);
 
         assert.equal(0, post.id);
         assert.equal(title, post.title);
         assert.equal(content, post.content);
 
-        console.log(comments);
-        console.log(post.comments);
 
         assert.deepEqual(comments, post.comments);
         done();
       });
-    })
+    });
   });
+
+
+  describe ('Posts can handle a large batch of insertions and retrievals', function() {
+    var funcList = [];
+    var postTitles = [];
+
+    it ('Should be able to handle a large quantity of insertions', function(done) {
+      for (var i = 0; i < 300; i++) {
+        var title = getTitle();
+        postTitles[i + 1] = title;
+        var newPost = new Post(title, getContent(), getComments());
+
+        funcList[i] = (function(post, title) {
+          return function(callback) {
+            post.save(function(err, id) {
+              postTitles[id] = title;
+              callback();
+            })
+          }
+        })(newPost, title);
+      }
+
+      async.parallel(funcList, done);
+    });
+
+    it ('Should be able to retrieve a large quantity of inserted data', function(done) {
+      Post.fetchAll(function(err, posts) {
+        posts.sort(function(post1, post2) {
+          return post1.id - post2.id;
+        });
+
+        for (var i = 0; i < posts.length; i++) {
+          var post = posts[i];
+
+          if (post.id == 0) continue;
+
+          assert.equal(post.title, postTitles[post.id]);
+        }
+
+        done();
+      });
+    });
+  });
+
 });
 
 
