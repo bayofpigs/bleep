@@ -9,6 +9,7 @@ var async = require('async');
 var MongoClient = require('mongodb').MongoClient;
 var authentication = require('../../util/authentication');
 var routesManager = require('../../util/routesmanager');
+var staticManager = require('../../util/staticmanager');
 var util = require('util');
 var path = require('path');
 var fs = require('fs');
@@ -105,6 +106,10 @@ module.exports = function(app, indexRoutes) {
 
       console.log("Purging index route");
       routesManager.purge(app, "/");
+
+      console.log("Purging statics");
+      staticmanger.purge(app, "/public");
+      
       require('../../config')(app, function(err) {
         if (err) { 
           console.error("An error occured: " + err);

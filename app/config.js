@@ -5,6 +5,7 @@ var express = require('express');
 var favicon = require('serve-favicon');
 var MongoClient = require('mongodb').MongoClient;
 var format = require('util').format;
+
 var indexRouter = require('./routes/index');
 var adminRouter = require('./routes/admin');
 var authentication = require('./util/authentication');
@@ -15,28 +16,31 @@ module.exports = function(app, callback, database) {
   async.waterfall([
     // Assuming theme information is preinstalled
     function fetchThemeInformation(cb) {
+      var db;
+
       // Database has been preinitialized (generally in setup)
       if (database) {
+        console.log("Database exists: initialized through setup");
+        console.log(database);
         db = database;
 
         theme.fetchTheme(db, function(fetchedTheme) {
-          theme.setTheme(fetchedTheme || "default", app, function(err) {
-            cb(null, db);
-          });
+          theme.setTheme(fetchedTheme || "default", app);
+          cb(null, db);
         });
 
         return;
       }
 
-      var db;
+      
       var config = require('../config.json').database;
       MongoClient.connect(format('mongodb://%s:%s/%s', config.host, config.port, config.db), 
         function(err, database) {
           db = database;
+
           theme.fetchTheme(db, function(fetchedTheme) {
-            theme.setTheme(fetchedTheme || "default", app, function(err) {
-              cb(null, db);
-            });
+            theme.setTheme(fetchedTheme || "default", app);
+            cb(null, db);
           });
       });
     },

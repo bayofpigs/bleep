@@ -1,13 +1,25 @@
 html
   head
-    title= Setup page
+    title Bleep setup
+    meta(charset="utf-8")
+    meta(http-equiv="X-UA-Compatible", content="IE=edge")
+    meta(name="viewport", content="width=device-width, initial-scale=1")
+
     // bower:css
     link(rel='stylesheet', href='/bower_components/bootstrap/dist/css/bootstrap.css')
     // endbower
 
-    meta(name="viewport", content="width=device-width, initial-scale=1")
+    link(href='http://fonts.googleapis.com/css?family=Arvo:400,700,400italic,700italic',
+     rel='stylesheet' type='text/css')
+    link(rel='stylesheet', href='/static/css/main.css')
     block pagecss
   body
+    .container
+      .header
+        h1 Bleep
+
+      block content
+
     // bower:js
     script(src='/bower_components/jquery/jquery.js')
     script(src='/bower_components/angular/angular.js')

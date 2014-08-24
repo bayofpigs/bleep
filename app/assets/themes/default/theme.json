@@ -1,0 +1,5 @@
+{
+  "name": "Default Bleep Theme",
+  "staticFolders": ["static"],
+  "views": "."
+}
