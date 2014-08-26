@@ -157,6 +157,41 @@ describe('Posts:', function() {
         done();
       });
     });
+
+    it ('Should be able to retrieve pages of data correctly', function(done) {
+      var POSTS_PER_PAGE = 25;
+      var funcList = [];
+      for (var i = 0; i < 10; i++) {
+        funcList[i] = (function(page) {
+          return function(callback) {
+            Post.fetchPage(page, POSTS_PER_PAGE, function(err, posts) {
+              if (err) {
+                return callback(err);
+              }
+
+              posts.sort(function(post1, post2) {
+                return post1.id - post2.id;
+              });
+
+              var min = (page - 1) * POSTS_PER_PAGE;
+              for (var i = 0; i < posts.length; i++) {
+                assert.equal(posts[i].id, min + i);
+              }
+
+              callback();
+            });
+          }
+        })(i + 1);
+      }
+
+      async.parallel(funcList, function(err) {
+        if (err) {
+          return done(err);
+        }
+
+        done();
+      })
+    })
   });
 
 });

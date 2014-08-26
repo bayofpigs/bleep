@@ -42,6 +42,33 @@ module.exports = function(db) {
     });
   };
 
+  Post.fetchPage = function(pageNum, postsPerPage, callback) {
+    if (pageNum <= 0) {
+      console.log("Got error");
+      callback(Error("Attempted fetchPage: " + pageNum + ", but page must be greater than 0"));
+    }
+
+    var posts = db.collection('posts');
+
+    var pageLower = (pageNum - 1) * postsPerPage;
+    var pageHigher = pageNum * postsPerPage;
+
+    posts.find({ _id: {$gte: pageLower, $lt: pageHigher} }).toArray(function(err, result) {
+      if (err) {
+        callback(err);
+      }
+
+      var posts = [];
+      for (var i = 0; i < result.length; i++) {
+        var doc = result[i];
+        posts[i] = new Post(doc.title, doc.content, doc.comments);
+        posts[i].id = doc._id;
+      }
+
+      callback(null, posts);
+    });
+  };
+
   Post.fetchById = function(id, callback) {
     if (id < 0) {
       callback(new Error("Post: Incorrect id parameter: " + id));
