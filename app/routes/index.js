@@ -4,19 +4,17 @@
 
 var express = require('express');
 var Router = express.Router;
+var controllerGenerator = require('../controllers/post');
 
-module.exports = function() {
+module.exports = function(db) {
   var router = Router();
+  var controller = controllerGenerator(db);
 
   /* GET setup page */
-  router.get('/posts', function(req, res) {
-    res.send("This is posts page");
-  });
+  router.get('/posts/:page', controller.postPage);
 
   /* Redirect route to setup page */
-  router.get('/', function(req, res) {
-    res.redirect('/posts');
-  });
+  router.get('/', controller.index);
 
   return router;
 };

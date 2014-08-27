@@ -10,6 +10,7 @@ var MongoClient = require('mongodb').MongoClient;
 var authentication = require('../../util/authentication');
 var routesManager = require('../../util/routesmanager');
 var staticManager = require('../../util/staticmanager');
+var PostGenerator = require('../../models/post');
 var util = require('util');
 var path = require('path');
 var fs = require('fs');
@@ -36,33 +37,43 @@ module.exports = function(app, indexRoutes) {
     var db;
 
     async.series([
+      /* Drop database, then set configuration */
       function setInitialSiteConfiguration(callback) {
         MongoClient.connect(util.format("mongodb://%s:%s/%s", mongoHost, port, databaseName), 
           function(err, database) {
-          db = database;
-          var configuration = db.collection("configuration");
-
-          async.parallel([
-            function insertBlogInformationConfiguration(cb) {
-              configuration.update({type: "bloginfo"}, 
-                {$set: {title: req.body.title, author: req.body.name}},
-                {upsert: true},
-              function (err, docs) {
-                return cb(err);
-              });
-            },
-            function insertOtherInformationConfiguration(cb) {
-              configuration.update({type: "settings"},
-                {$set: {theme: "default"}},
-                {upsert: true},
-              function(err, docs) {
-                return cb(err);
-              });
+            if (err) {
+              return callback(err);
             }
-          ],
-          function(err) {
-            return callback(err);
-          });
+
+            db = database;
+            var configuration = db.collection("configuration");
+            db.dropDatabase(function(err, done) {
+              if (err) {
+                return callback(err);
+              }
+              async.parallel([
+                function insertBlogInformationConfiguration(cb) {
+                  configuration.update({type: "bloginfo"}, 
+                    {$set: {title: req.body.title, author: req.body.name}},
+                    {upsert: true},
+                  function (err, docs) {
+                    return cb(err);
+                  });
+                },
+                function insertOtherInformationConfiguration(cb) {
+                  configuration.update({type: "settings"},
+                    {$set: {theme: "default"}},
+                    {upsert: true},
+                  function(err, docs) {
+                    return cb(err);
+                  });
+                }
+              ],
+
+              function(err) {
+                return callback(err);
+              });
+            });
         });
       },
       function addIncrementingCountersToDatabase(callback) {
@@ -97,6 +108,25 @@ module.exports = function(app, indexRoutes) {
 
           callback(null);
         });
+      }, 
+      function writeSamplePost(callback) {
+        var Post = PostGenerator(db);
+        
+        var title = "Welcome to Bleep!";
+        var content = 
+          "<em>Checkout</em> the admin console at /admin to add and modify posts and settings " +
+          "To delete this post, find this post under /admin/edit and click DELETE next " +
+          "to this post's content. Have fun with your new blog!";
+        var comments = [
+          { title: "This is a comment", author: "Bleep", content: "Users can opine here."}
+        ];
+
+        var post = new Post(title, content, comments);
+
+        console.log(post);
+        post.save(function(err) {
+          callback(err);
+        });
       }
     ],
     function uponCompletionOfAllSetupTasks(err) {
@@ -108,7 +138,7 @@ module.exports = function(app, indexRoutes) {
       routesManager.purge(app, "/");
 
       console.log("Purging statics");
-      staticmanger.purge(app, "/public");
+      staticManager.purge(app, "/public");
       
       require('../../config')(app, function(err) {
         if (err) { 

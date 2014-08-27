@@ -1,3 +1,11 @@
 extends layout
 
 block content
+  - if (posts.length == 0) {
+    h4 Looks like there's nothing here :(
+  - }
+
+  each post in posts
+    h3= post.title
+    h6.text-muted.small Posted on #{post.dateModified}
+    p!= post.content

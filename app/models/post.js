@@ -36,6 +36,7 @@ module.exports = function(db) {
         var doc = result[i];
         posts[i] = new Post(doc.title, doc.content, doc.comments);
         posts[i].id = doc._id;
+        posts[i].dateModified = doc.dateModified;
       }
 
       callback(null, posts);
@@ -63,6 +64,7 @@ module.exports = function(db) {
         var doc = result[i];
         posts[i] = new Post(doc.title, doc.content, doc.comments);
         posts[i].id = doc._id;
+        posts[i].dateModified = doc.dateModified;
       }
 
       callback(null, posts);
@@ -82,6 +84,7 @@ module.exports = function(db) {
 
       var post = new Post(doc.title, doc.content, doc.comments);
       post.id = id;
+      post.dateModified = doc.dateModified;
 
       callback(null, post);
     })
