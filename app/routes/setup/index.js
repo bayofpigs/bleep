@@ -99,6 +99,7 @@ module.exports = function(app, indexRoutes) {
         output.database.port = port;
         output.database.db = databaseName;
         output.themes = "assets/themes";
+
         fs.writeFile(path.join(process.cwd(), "config.json"), 
           JSON.stringify(output, null, 4), 
           function(err) {

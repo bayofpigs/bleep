@@ -5,7 +5,6 @@ var path = require('path');
 
 module.exports = function(db) {
   var Post = PostGenerator(db);
-  var blogName = require(path.join(appRoot, 'config.json')).title;
 
   var exports = {
     postPage: function(req, res, next) {
@@ -16,8 +15,8 @@ module.exports = function(db) {
           return next(err);
         }
 
-        res.render("index", {blogname: blogName, posts: posts});
-      })
+        res.render("index", {posts: posts});
+      });
     },
     index: function(req, res) {
       Post.fetchPage(1, posts_per_page, function(err, posts) {
@@ -25,7 +24,7 @@ module.exports = function(db) {
           return next(err);
         }
 
-        res.render("index", {blogname: blogName, posts: posts});
+        res.render("index", {posts: posts});
       })
     }
   }

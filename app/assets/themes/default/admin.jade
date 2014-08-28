@@ -6,7 +6,6 @@ block content
   - }
 
   each post in posts
-    div(id="post#{post.id}")
-      h3= post.title
-      h6.text-muted.small Posted on #{post.dateModified}
-      p!= post.content
+    h3= post.title
+    h6.text-muted.small Posted on #{post.dateModified}
+    p!= post.content

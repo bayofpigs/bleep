@@ -1,0 +1,11 @@
+extends layout
+
+block pagecss
+  link(rel="stylesheet", href="/static/css/login.css")
+
+block content
+  form.form-signin(role="form", action="/admin/login", method="post")
+    h3.form-signin-heading Administrative login
+    input(name="password", type="password", class="form-control", placeholder="password", required, autofocus)
+    button.btn.btn-lg.btn-primary.btn-block(type="submit") Sign in
+

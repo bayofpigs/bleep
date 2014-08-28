@@ -52,7 +52,13 @@ module.exports = function(app, callback, database) {
       routes.add(app, admin, "/admin");
       routes.add(app, index, "/");
 
-      cb(null, app);
+      cb(null);
+    }, 
+    function configureNames(cb) {
+      var blogName = require(path.join(process.cwd(), 'config.json')).title;
+      app.locals.blogname = blogName;
+
+      cb(null);
     }
   ],
   function (err) {

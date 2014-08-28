@@ -55,13 +55,13 @@ Routes.add = function(app, route, dirName) {
     // The stack
   var stack = app._router.stack;
 
-  var expressInitIndex;
+  var insertBeginIndex;
   var thisStaticIndex;
   for (var i = 0; i < stack.length; i++) {
     var middleware = stack[i];
 
-    if (middleware.handle.name === "expressInit") {
-      expressInitIndex = i;
+    if (middleware.handle.name === "endOfMiddlewareMarker") {
+      insertBeginIndex = i;
     } else if (middleware.handle.name === "router") {
       if (regexpCoorespondsToDirname(dirName, middleware.regexp)) {
         thisStaticIndex = i;
@@ -69,7 +69,7 @@ Routes.add = function(app, route, dirName) {
     }
   }
 
-  var spliceIndex = expressInitIndex + 1;
+  var spliceIndex = insertBeginIndex + 1;
 
   var thisStatic = stack.splice(thisStaticIndex, 1)[0];
   stack.splice(spliceIndex, 0, thisStatic);

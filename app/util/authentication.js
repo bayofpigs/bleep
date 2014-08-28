@@ -110,6 +110,15 @@ module.exports = function(db, options) {
   };
 
   exports.savePassword = saveAdministratorPassword;
+  exports.ensureAuthenticated = function(req, res, next) {
+    console.log("SESSION");
+    console.log(req.session);
+    if (!req.isAuthenticated()) {
+      return res.redirect('/admin/login');
+    }
+
+    next();
+  };
 
   return exports;
 };

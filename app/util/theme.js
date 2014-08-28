@@ -76,7 +76,6 @@ module.exports = {
       staticsManager.add(app, fetchAbsoluteDirectories(themeName, statics[i]), staticName);
     }
 
-    console.log(app._router.stack);
 
     var viewsSub = themeConfiguration.views;
     var viewsDirectory = fetchAbsoluteDirectories(themeName, viewsSub);

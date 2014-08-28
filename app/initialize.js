@@ -1,24 +1,28 @@
 var path = require('path');
 var express = require('express');
-var session = require('express-session');
 var morgan = require('morgan');
 
 // Universal configuration settings
 module.exports = function(app) {
-  
   app.set('view engine', 'jade');
 
   // ----------- Universal statics --------------
   app.use(express.static(path.join(__dirname, 'assets/shared')));
 
   // ----------- Other middleware
-  
-  app.use(session({secret: "BleepBleepBleep", 
-                   resave: true,
-                   saveUninitialized: true}))
   app.use(morgan('combined'));
 
+  // ------------ Local settings
+  app.locals.pretty = true;
+
   // ----------- Error Handlers ---------------
+  
+  // Denote the end of the middleware stack. Ready to insert
+  // dynamic statics and routers afterwards
+  app.use(function endOfMiddlewareMarker(req, res, next) {
+    next();
+  });
+  
   // Catch 404 errors
   app.use(function(req, res, next) {
     console.log("Caught 404");
