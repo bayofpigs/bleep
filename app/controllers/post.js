@@ -25,7 +25,7 @@ module.exports = function(db) {
         }
 
         res.render("index", {posts: posts});
-      })
+      });
     }
   }
 

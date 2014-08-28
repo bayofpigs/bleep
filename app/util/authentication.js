@@ -42,7 +42,6 @@ module.exports = function(db, options) {
       console.log("FETCHING THE PASSWORD OBJECT: ")
       console.log(obj);
 
-      cb();
       crypto.pbkdf2(password, obj[options.saltField], options.iterations, options.keyLen, function(err, hashRaw) {
         if (err) {
           return cb(err);
@@ -88,7 +87,7 @@ module.exports = function(db, options) {
     req.logIn = function(password, cb) {
       authenticate(password, function(err, result, message) {
         if (err) {
-          return cb(err);
+          return cb(err, false, "An error occured.");
         } else if (!result) {
           return cb(null, result, message);
         }
@@ -102,18 +101,16 @@ module.exports = function(db, options) {
       req.session.admin = false;
     };
 
-    req.isAuthenticated = function() {
-      return req.session.admin === true;
-    };
+    req.isAuthenticated = (req.session.admin === true);
+
+    res.locals.isAuthenticated = (req.session.admin === true);
     
     next();
   };
 
   exports.savePassword = saveAdministratorPassword;
   exports.ensureAuthenticated = function(req, res, next) {
-    console.log("SESSION");
-    console.log(req.session);
-    if (!req.isAuthenticated()) {
+    if (!req.isAuthenticated) {
       return res.redirect('/admin/login');
     }
 

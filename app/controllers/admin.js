@@ -27,12 +27,24 @@ module.exports = function(db) {
         res.render("admin", {posts: posts});
       });
     }, 
+    pageDefault: function(req, res) {
+      res.redirect('/admin/page/1');
+    },
     login: function(req, res) {
       res.render("login");
     },
     handleLogin: function(req, res) {
-      console.log(req.body.password);
-      res.send("derp");
+
+      req.logIn(req.body.password, function(err, result, message) {
+
+        if (err || !result) {
+          req.flash('error', message);
+          return res.redirect('/admin/login');
+        }
+
+        req.flash('success', 'Logged in');
+        return res.redirect('/admin');
+      });
     }
   }
 
