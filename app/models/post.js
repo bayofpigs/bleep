@@ -78,6 +78,7 @@ module.exports = function(db) {
 
     var posts = db.collection('posts');
     posts.findOne({_id: id}, function(err, doc) {
+      console.log("FETCHED POST WITH ID " + id);
       if (err) {
         return callback(err);
       }

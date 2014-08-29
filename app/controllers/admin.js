@@ -53,6 +53,7 @@ module.exports = function(db) {
         return res.send(403, {message: "Not authorized"}); 
       }
 
+      console.log(req.param('id'));
       Post.fetchById(Number(req.param('id')), function(err, post) {
         if (err) {
           return res.send("Error: " + err);

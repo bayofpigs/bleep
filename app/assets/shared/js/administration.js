@@ -1,6 +1,6 @@
 $(document).ready(function() {
   function getIdFromIdAttr(attr) {
-    return Number(attr.substring("post".length + 1));
+    return Number(attr.substring("post".length));
   };
 
   $('.delete').click(function(e) {
@@ -9,13 +9,13 @@ $(document).ready(function() {
     if (window.confirm("Are you sure you want to delete this post?")) {
       var parent = $(this).parent();
       var id = getIdFromIdAttr($(this).parent().attr('id'));
+      console.log("Chose id " + id);
 
       $.ajax({
         url: "/admin/post/" + id,
         type: "DELETE",
         dataType: "json",
         success: function(response) {
-          alert("Post successfully deleted");
           parent.hide();
         },
         error: function(jq, status, err) {
