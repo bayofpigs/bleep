@@ -35,6 +35,7 @@ module.exports = function(app) {
   // For production
   app.use(function(err, req, res, next) {
     console.log("Caught error");
+    console.log(err);
     res.status(err.status || 500);
     res.render('error', {
       message: err.message,

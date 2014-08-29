@@ -37,6 +37,8 @@ module.exports = function(db) {
   router.get('/login', controller.login);
   router.post('/login', controller.handleLogin);
 
+  router.delete('/post/:id', controller.destroy);
+
   router.get('/compose', function(req, res) {
     res.send("This is where the admin will write his/her beautiful writing");
   })

@@ -45,6 +45,27 @@ module.exports = function(db) {
         req.flash('success', 'Logged in');
         return res.redirect('/admin');
       });
+    },
+
+    // Post modifiers
+    destroy: function(req, res) {
+      if (!req.isAuthenticated) {
+        return res.send(403, {message: "Not authorized"}); 
+      }
+
+      Post.fetchById(req.param('id'), function(err, post) {
+        if (err) {
+          return res.send("Error: " + err);
+        }
+
+        post.delete(function(err) {
+          if (err) {
+            return res.send("Error: " + err);
+          }
+
+          return res.send({status: "success"});
+        });
+      });
     }
   }
 

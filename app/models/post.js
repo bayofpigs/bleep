@@ -95,7 +95,7 @@ module.exports = function(db) {
       callback(new Error("Post: Undefined post id in delete operation"));
     }
     var posts = db.collection('posts');
-    posts.remove({id: this.id}, {w: 1}, function(err) {
+    posts.remove({_id: this.id}, {w: 1}, function(err) {
       callback(err);
     });
   };
