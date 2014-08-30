@@ -31,15 +31,17 @@ module.exports = function(db) {
   router.use(bodyParser.urlencoded({ extended: false }));
 
   /* Restful API */
-  router.get('/', controller.home);
+  router.get('/', auth.ensureAuthenticated, controller.home);
   router.get('/page', auth.ensureAuthenticated, controller.pageDefault);
   router.get('/page/:page', auth.ensureAuthenticated, controller.page);
   router.get('/login', controller.login);
   router.post('/login', controller.handleLogin);
 
   router.delete('/post/:id', controller.destroy);
-
-  router.get('/compose', function(req, res) {
+  router.get('/new', function(req, res) {
+    res.send("This is where the admin will write his/her beautiful writing");
+  });
+  router.get('/edit/:id', function(req, res) {
     res.send("This is where the admin will write his/her beautiful writing");
   })
 

@@ -12,9 +12,15 @@ block content
   - }
 
   each post in posts
-    div(id="post#{post.id}")
-      h3= post.title
+    div(id="post#{post.id}", class="post")
+      h3
+        a(href="#").postTitle= post.title
       h6.text-muted.small Posted on #{post.dateModified}
       p!= post.content
-      a.edit(href="#") edit 
-      a.delete(href="#") delete
+      h4 
+        a(href="#") #{post.comments.length} comments
+
+  - if (more) {
+    h3.additionalLinks 
+      a(href="/admin/page/#{nextPage}") More
+  - }

@@ -48,6 +48,28 @@ module.exports = function(db) {
       console.log("Got error");
       callback(Error("Attempted fetchPage: " + pageNum + ", but page must be greater than 0"));
     }
+    Post.fetchAll(function(err, posts) {
+      if (err) {
+        callback(err);
+      }
+
+      // Are there still more posts?
+
+      var min = (pageNum - 1) * postsPerPage;
+      var more = ((min + postsPerPage) < posts.length);
+
+      console.log(min);
+      console.log(postsPerPage);
+      console.log(posts.length);
+      callback(null, posts.slice(min, min + postsPerPage), more);
+    });
+  }
+
+  Post.fetchIdRangePage = function(pageNum, postsPerPage, callback) {
+    if (pageNum <= 0) {
+      console.log("Got error");
+      callback(Error("Attempted fetchPage: " + pageNum + ", but page must be greater than 0"));
+    }
 
     var posts = db.collection('posts');
 

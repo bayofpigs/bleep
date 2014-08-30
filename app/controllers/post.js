@@ -8,23 +8,27 @@ module.exports = function(db) {
 
   var exports = {
     postPage: function(req, res, next) {
-      var page = req.param('page');
+      var page = Number(req.param('page'));
 
-      Post.fetchPage(page, posts_per_page, function(err, posts) {
+      Post.fetchPage(page, posts_per_page, function(err, posts, more) {
         if (err) {
           return next(err);
         }
 
-        res.render("index", {posts: posts});
+        res.render("index", {posts: posts, more: more, nextPage: page + 1});
       });
     },
+    postDefault: function(req, res) {
+      res.redirect("/posts/1");
+    },
     index: function(req, res) {
-      Post.fetchPage(1, posts_per_page, function(err, posts) {
+      Post.fetchPage(1, posts_per_page, function(err, posts, more) {
         if (err) {
           return next(err);
         }
 
-        res.render("index", {posts: posts});
+        console.log(more);
+        res.render("index", {posts: posts, more: more, nextPage: 1 + 1});
       });
     }
   }
