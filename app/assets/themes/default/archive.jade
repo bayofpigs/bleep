@@ -1,0 +1,10 @@
+extends layout
+
+block content
+  - if (dates.length == 0) {
+    h4 Looks like there's nothing here :(
+  - }
+
+  each date in dates
+    h3
+      a(href="/archive/#{date.date.getFullYear()}/#{date.date.getMonth()}")= date.string

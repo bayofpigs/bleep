@@ -13,6 +13,8 @@ module.exports = function(db) {
   /* GET setup page */
   router.get('/posts/:page', controller.postPage);
   router.get('/posts', controller.postDefault);
+  router.get('/archive', controller.archive);
+  router.get('/archive/:year/:month', controller.archiveByDate);
   /* Redirect route to setup page */
   router.get('/', controller.index);
 

@@ -12,6 +12,24 @@ module.exports = function(db) {
     });
   }
 
+  function postInitCallbackGenerator(callback) {
+    return function(err, result) {
+      if (err) {
+        callback(err);
+      }
+
+      var posts = [];
+      for (var i = 0; i < result.length; i++) {
+        var doc = result[i];
+        posts[i] = new Post(doc.title, doc.content, doc.comments);
+        posts[i].id = doc._id;
+        posts[i].dateModified = doc.dateModified;
+      }
+
+      callback(null, posts);
+    }
+  }
+
   var Post = function(title, content, comments) {
     this.comments = [];
     if (comments) {
@@ -26,22 +44,34 @@ module.exports = function(db) {
 
   Post.fetchAll = function(callback) {
     var posts = db.collection('posts');
-    posts.find().toArray(function(err, result) {
-      if (err) {
-        callback(err);
-      }
-
-      var posts = [];
-      for (var i = 0; i < result.length; i++) {
-        var doc = result[i];
-        posts[i] = new Post(doc.title, doc.content, doc.comments);
-        posts[i].id = doc._id;
-        posts[i].dateModified = doc.dateModified;
-      }
-
-      callback(null, posts);
-    });
+    posts.find().toArray(postInitCallbackGenerator(callback));
   };
+
+  Post.fetchByMonth = function(date, callback) {
+    var posts = db.collection('posts');
+
+    var afterDate = new Date(date.getFullYear(), date.getMonth(), 1);
+    var beforeDate = new Date(date.getFullYear(), date.getMonth() + 1, 1);
+    posts.find({ dateModified: {$gte: afterDate, $lt: beforeDate}})
+         .toArray(postInitCallbackGenerator(callback));
+  };
+
+  Post.fetchByDate = function(date, callback) {
+    var posts = db.collection('posts');
+
+    var afterDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+    var beforeDate = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1);
+    posts.find({ dateModified: {$gte: afterDate, $lt: beforeDate}})
+         .toArray(postInitCallbackGenerator(callback));
+  };
+
+  Post.fetchByYear = function(date, callback) {
+    var posts = db.collection('posts');
+    var afterDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+    var beforeDate = new Date(date.getFullYear + 1, date.getMonth(), date.getDate());
+    posts.find({ dateModified: {$gte: afterDate, $lt: beforeDate}})
+         .toArray(postInitCallbackGenerator(callback));
+  }
 
   Post.fetchPage = function(pageNum, postsPerPage, callback) {
     if (pageNum <= 0) {
