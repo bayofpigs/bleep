@@ -53,6 +53,10 @@ module.exports = function(db) {
     postPage: function(req, res, next) {
       var page = Number(req.param('page'));
 
+      if (isNaN(page)) {
+        return next();
+      }
+
       Post.fetchPage(page, posts_per_page, function(err, posts, more) {
         if (err) {
           return next(err);
@@ -88,6 +92,14 @@ module.exports = function(db) {
       var year = Number(req.param('year'));
       var fetchDate = new Date(year, month, 1);
 
+      if (isNaN(year)) {
+        return next();
+      }
+
+      if (isNaN(month)) {
+        return next();
+      }
+
       Post.fetchByMonth(fetchDate, function(err, posts) {
         if (err) {
           next (err);
@@ -95,8 +107,22 @@ module.exports = function(db) {
 
         res.render("index", {posts: posts});
       });
+    },
+    postIndividual: function(req, res, next) {
+      var id = Number(req.param('id'));
+      var title = req.param('title');
+
+      if (isNaN(id)) {
+        return next();
+      }
+
+      Post.fetchById()
     }
   }
 
   return exports
 }
+
+
+
+

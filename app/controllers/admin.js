@@ -19,6 +19,10 @@ module.exports = function(db) {
     page: function(req, res) {
       var page = Number(req.param('page'));
 
+      if (isNaN(page)) {
+        return next();
+      }
+
       Post.fetchPage(page, posts_per_page, function(err, posts, more) {
         if (err) {
           return next(err);
@@ -53,10 +57,13 @@ module.exports = function(db) {
         return res.send(403, {message: "Not authorized"}); 
       }
 
-      console.log(req.param('id'));
       Post.fetchById(Number(req.param('id')), function(err, post) {
         if (err) {
           return res.send("Error: " + err);
+        }
+
+        if (post === null) {
+          return res.send("Error: Post id undefined");
         }
 
         post.delete(function(err) {
