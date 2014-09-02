@@ -1,6 +1,25 @@
 extends layout
 
+block pagecss
+  link(rel="stylesheet", href="/static/css/post.css")
+
 block content
   - if (!post) {
     h1 Post not found. It may have been moved or deleted. 
   - } 
+
+  div#content
+    h1= post.title
+    h6.text-muted.small Posted on #{post.dateModified}
+    p= post.content
+
+  hr
+
+  h3 Comments (#{post.comments.length})
+
+  div#comments
+    each comment in post.comments
+      div.comment
+        h4.comment-title= comment.title
+        h6.small.text-muted.comment-author By #{comment.author}
+        h6.small.comment-content= comment.content

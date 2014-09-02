@@ -1,0 +1,14 @@
+#comments .comment .comment-title {
+  margin-bottom: 2px;
+}
+
+#comments .comment .comment-author {
+  margin-bottom: 2px;
+}
+
+#comments .comment .comment-content {
+  padding-top: 0px;
+  padding-bottom: 0px;
+  margin-top: 0px;
+  margin-bottom: 0px;
+}

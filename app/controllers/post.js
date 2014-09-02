@@ -116,7 +116,13 @@ module.exports = function(db) {
         return next();
       }
 
-      Post.fetchById()
+      Post.fetchById(id, function(err, post) {
+        if (err) {
+          next();
+        }
+
+        res.render('post', {post: post});
+      })
     }
   }
 
