@@ -26,7 +26,7 @@ module.exports = function(app) {
   // Catch 404 errors
   app.use(function(req, res, next) {
     console.log("Caught 404");
-    var err = new Error('Not Found');
+    var err = new Error('The requested page was not found. Very sorry about that.');
     err.status = 404;
     next(err);
   });

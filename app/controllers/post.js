@@ -121,6 +121,11 @@ module.exports = function(db) {
           next();
         }
 
+        if (post === null) {
+          return next(new Error("The requested post was not found. It may have been" + 
+                          " deleted or moved."));
+        }
+
         res.render('post', {post: post});
       })
     }
