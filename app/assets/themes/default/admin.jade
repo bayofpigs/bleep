@@ -19,6 +19,8 @@ block content
       p!= post.content
       h4 
         a(href="#") #{post.comments.length} comments
+      a.edit Edit
+      a.delete Delete
 
   - if (more) {
     h3.additionalLinks 

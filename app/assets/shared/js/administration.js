@@ -9,7 +9,6 @@ $(document).ready(function() {
     if (window.confirm("Are you sure you want to delete this post?")) {
       var parent = $(this).parent();
       var id = getIdFromIdAttr($(this).parent().attr('id'));
-      console.log("Chose id " + id);
 
       $.ajax({
         url: "/admin/post/" + id,

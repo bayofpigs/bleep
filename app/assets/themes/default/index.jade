@@ -15,7 +15,8 @@ block content
         a(href="/post/#{post.id}") #{post.comments.length} comments
 
   - if (more) {
-    h3.additionalLinks 
-      a(href="/archive")#archive Archive
-      a(href="/posts/#{nextPage}")#more More
+    .bottomContent
+      h3.additionalLinks 
+        a(href="/archive")#archive Archive
+        a(href="/posts/#{nextPage}")#more More
   - }

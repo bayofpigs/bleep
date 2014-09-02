@@ -11,7 +11,8 @@ body {
 }
 
 /* Everything but the jumbotron gets side spacing for mobile first views */
-.header {
+.header, 
+.footer {
   padding-right: 15px;
   padding-left: 15px;
   color: #5785C2;
@@ -20,6 +21,14 @@ body {
 /* Custom page header */
 .header {
   /*border-bottom: 1px solid #e5e5e5; */
+}
+
+.footer {
+  padding-top: 20px;
+  margin-top: 70px;
+  color: #777;
+  border-top: 1px solid #e5e5e5;
+  clear: both;
 }
 
 .additionalLinks {
