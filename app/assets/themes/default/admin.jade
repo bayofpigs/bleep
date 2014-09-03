@@ -20,18 +20,18 @@ block content
     - if (posts.length == 0) {
       h4 No posts found.
       h4 You can create a 
-        a(href="#") new one.
+        a(href="/admin/create") new one.
     - }
 
     each post in posts
       div(id="post#{post.id}", class="post")
         h3
-          a(href="#").postTitle= post.title
-        h6.text-muted.small Posted on #{post.dateModified}
+          a(href="/admin/edit/#{post.id}").postTitle= post.title
+        h6.text-muted.small Last modified on #{post.dateModified}
         p!= post.content
         h4 
           a(href="#") #{post.comments.length} comments
-        a.edit Edit
+        a.edit(href="/admin/edit/#{post.id}") Edit
         a.delete Delete
 
   - if (more) {

@@ -1,0 +1,32 @@
+extends layout
+
+block pagecss
+  // bower:css
+  link(rel='stylesheet', href='/bower_components/medium-editor/dist/css/medium-editor.css')
+  link(rel='stylesheet', href='/bower_components/medium-editor/dist/css/themes/bootstrap.min.css')
+  link(rel='stylesheet', href='/bower_components/medium-editor-insert-plugin/dist/css/medium-editor-insert-plugin.css')
+  // endbower
+  link(rel='stylesheet', href='/static/css/editor.css')
+
+block content
+  noscript
+    p.
+     It looks like you have JavaScript disabled. This editor requires js, so enabling it will really
+     help.
+
+  input(type="text", value="#{post.title}")#title
+  div#editor!= post.content
+
+  button.btn.btn-success.btn-lg#save(value="#{post.id}") Save Post
+
+block pagejavascript
+  // bower:js
+  script(src='/bower_components/medium-editor/dist/js/medium-editor.js')
+  script(src='/bower_components/medium-editor-insert-plugin/dist/js/medium-editor-insert-plugin.all.js')
+  script(src='/js/edit.js')
+  // endbower
+  script.
+    var editor = new MediumEditor("#editor", {
+      buttons: ['bold', 'italic', 'underline', 'pre', 'image'],
+      placeholder: "Post content here"
+    });

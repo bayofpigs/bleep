@@ -9,7 +9,7 @@ block content
     div(id="post#{post.id}", class="post")
       h3
         a(href="/post/#{post.id}").postTitle= post.title
-      h6.text-muted.small Posted on #{post.dateModified}
+      h6.text-muted.small Last modified on #{post.dateModified}
       p!= post.content
       h4 
         a(href="/post/#{post.id}") #{post.comments.length} comments

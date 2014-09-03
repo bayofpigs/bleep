@@ -9,21 +9,22 @@ block pagecss
   link(rel='stylesheet', href='/static/css/editor.css')
 
 block content
-  - if (post) {
-    input(type="text", value="#{post.title}")#title
-    div#editor= post.content
-  - } else {
-    input(type="text", placeholder="Post title here")#title
-    div#editor
-  - }
+  noscript
+    p.
+     It looks like you have JavaScript disabled. This editor requires js, so enabling it will really
+     help.
 
-  button.btn.btn-success.btn-lg Save Post
+  input(type="text", placeholder="Post title here")#title
+  div#editor
+
+  button.btn.btn-success.btn-lg#save Save Post
 
 block pagejavascript
   // bower:js
   script(src='/bower_components/medium-editor/dist/js/medium-editor.js')
   script(src='/bower_components/medium-editor-insert-plugin/dist/js/medium-editor-insert-plugin.all.js')
   // endbower
+  script(src='/js/create.js')
   script.
     var editor = new MediumEditor("#editor", {
       buttons: ['bold', 'italic', 'underline', 'pre', 'image'],

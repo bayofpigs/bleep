@@ -46,6 +46,8 @@ module.exports = function(db) {
   router.delete('/post/:id', controller.destroy);
   router.get('/create', controller.createForm);
   router.get('/edit/:id', controller.editForm);
+  router.post('/create', controller.create);
+  router.put('/edit/:id', controller.edit);
 
   return router;
 }

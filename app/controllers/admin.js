@@ -62,7 +62,26 @@ module.exports = function(db) {
 
     // Post modifiers
     createForm: function(req, res) {
-      res.render("editor");
+      res.render("create");
+    },
+    create: function(req, res) {
+      if (!req.isAuthenticated) {
+        return res.send(403, {message: "Not authorized"});
+      }
+
+      console.log(req.body);
+
+      var title = req.body.title;
+      var content = req.body.content;
+
+      var post = new Post(title, content);
+      post.save(function(err) {
+        if (err) {
+          return res.send("Error: " + err);
+        }
+
+        return res.send({status: "Success"});
+      })
     },
     editForm: function(req, res, next) {
       var id = Number(req.param("id"));
@@ -80,8 +99,38 @@ module.exports = function(db) {
           return next(new Error("Post not found: it may have been moved or deleted"));
         }
 
-        res.render("editor", {post: post});
+        res.render("edit", {post: post});
       })
+    },
+    edit: function(req, res) {
+      var id = Number(req.param('id'));
+
+      if (isNaN(id)) {
+        return res.send("Error: id must be a number");
+      }
+
+      console.log(req.body);
+
+      Post.fetchById(id, function(err, post) {
+        if (err) {
+          return res.send("Error: " + err);
+        }
+
+        if (post === null) {
+          return res.send("Error: Post id undefined");
+        }
+
+        post.title = req.body.title || "";
+        post.content = req.body.content || "";
+
+        post.save(function(err) {
+          if (err) {
+            return res.send("Error: " + err);
+          }
+
+          res.send({status: "Success"});
+        });
+      });
     },
     destroy: function(req, res) {
       if (!req.isAuthenticated) {
