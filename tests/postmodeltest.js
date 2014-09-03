@@ -174,6 +174,9 @@ describe('Posts:', function() {
               });
 
               var min = (page - 1) * POSTS_PER_PAGE;
+              var TOTAL_POSTS = 301;
+
+              var min = TOTAL_POSTS - POSTS_PER_PAGE * page;
               for (var i = 0; i < posts.length; i++) {
                 assert.equal(posts[i].id, min + i);
               }

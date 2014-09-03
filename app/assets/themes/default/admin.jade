@@ -7,25 +7,32 @@ block pagejavascript
   script(src="/js/administration.js")
 
 block content
-  h3 Administration
-  a(href="/admin/logout") Logout 
-  a(href="/admin/settings") Settings
-  - if (posts.length == 0) {
-    h4 No posts found.
-    h4 You can create a 
-      a(href="#") new one.
-  - }
+  noscript
+    p It looks like you have javascript disabled. Javascript is required for many administrative tasks :( Please
+      | enable it if you can.
+  div#options
+    h3 Admin Panel
+    a(href="/admin/logout")#logout Logout 
+    a(href="/admin/settings")#settings Settings
+  a.btn.btn-lg.btn-success#newPost(href="/admin/create") Create New Post
 
-  each post in posts
-    div(id="post#{post.id}", class="post")
-      h3
-        a(href="#").postTitle= post.title
-      h6.text-muted.small Posted on #{post.dateModified}
-      p!= post.content
-      h4 
-        a(href="#") #{post.comments.length} comments
-      a.edit Edit
-      a.delete Delete
+  div#posts
+    - if (posts.length == 0) {
+      h4 No posts found.
+      h4 You can create a 
+        a(href="#") new one.
+    - }
+
+    each post in posts
+      div(id="post#{post.id}", class="post")
+        h3
+          a(href="#").postTitle= post.title
+        h6.text-muted.small Posted on #{post.dateModified}
+        p!= post.content
+        h4 
+          a(href="#") #{post.comments.length} comments
+        a.edit Edit
+        a.delete Delete
 
   - if (more) {
     h3.additionalLinks 

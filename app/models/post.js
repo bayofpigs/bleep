@@ -26,6 +26,10 @@ module.exports = function(db) {
         posts[i].dateModified = doc.dateModified;
       }
 
+      posts.sort(function(post1, post2) {
+        return post2.id - post1.id;
+      })
+
       callback(null, posts);
     }
   }
@@ -83,14 +87,15 @@ module.exports = function(db) {
         callback(err);
       }
 
-      // Are there still more posts?
+      // Sort posts by id
+      posts.sort(function(post1, post2) {
+        return post2.id - post1.id;
+      });
 
+      // Are there still more posts?
       var min = (pageNum - 1) * postsPerPage;
       var more = ((min + postsPerPage) < posts.length);
 
-      console.log(min);
-      console.log(postsPerPage);
-      console.log(posts.length);
       callback(null, posts.slice(min, min + postsPerPage), more);
     });
   }
