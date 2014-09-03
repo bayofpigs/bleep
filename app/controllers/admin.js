@@ -52,6 +52,28 @@ module.exports = function(db) {
     },
 
     // Post modifiers
+    createForm: function(req, res) {
+      res.render("editor");
+    },
+    editForm: function(req, res, next) {
+      var id = Number(req.param("id"));
+
+      if (isNaN(id)) {
+        next();
+      }
+
+      Post.fetchById(id, function(err, post) {
+        if (err) {
+          return res.send("Error: " + err);
+        }
+
+        if (post === null) {
+          return next(new Error("Post not found: it may have been moved or deleted"));
+        }
+
+        res.render("editor", {post: post});
+      })
+    },
     destroy: function(req, res) {
       if (!req.isAuthenticated) {
         return res.send(403, {message: "Not authorized"}); 

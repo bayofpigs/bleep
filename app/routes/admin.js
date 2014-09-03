@@ -6,6 +6,7 @@ var Router = express.Router;
 var authGenerator = require('../util/authentication');
 var controllerGenerator = require('../controllers/admin');
 var session = require('express-session');
+var MongoStore = require('connect-mongo')(session);
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var flash = require('connect-flash');
@@ -18,10 +19,14 @@ module.exports = function(db) {
 
   /* Session middleware */
   router.use(cookieParser());
-  router.use(session({secret: "BleepBleepBleep", 
-                   resave: true,
-                   saveUninitialized: true,
-                   }))
+  router.use(session({
+    secret: "BleepBleepBleep", 
+    resave: true,
+    saveUninitialized: true,
+    store: new MongoStore({
+      db: db
+    })
+  }))
   router.use(auth);
   router.use(flash());
   router.use(messages());
@@ -38,12 +43,8 @@ module.exports = function(db) {
   router.post('/login', controller.handleLogin);
 
   router.delete('/post/:id', controller.destroy);
-  router.get('/new', function(req, res) {
-    res.send("This is where the admin will write his/her beautiful writing");
-  });
-  router.get('/edit/:id', function(req, res) {
-    res.send("This is where the admin will write his/her beautiful writing");
-  })
+  router.get('/create', controller.createForm);
+  router.get('/edit/:id', controller.editForm);
 
   return router;
 }

@@ -1,17 +1,35 @@
 extends layout
 
-block content
-  p This is the editor.
-
 block pagecss
   // bower:css
   link(rel='stylesheet', href='/bower_components/medium-editor/dist/css/medium-editor.css')
-  link(rel='stylesheet', href='/bower_components/medium-editor/dist/css/themes/default.css')
+  link(rel='stylesheet', href='/bower_components/medium-editor/dist/css/themes/bootstrap.min.css')
   link(rel='stylesheet', href='/bower_components/medium-editor-insert-plugin/dist/css/medium-editor-insert-plugin.css')
   // endbower
+  link(rel='stylesheet', href='/static/css/editor.css')
+
+block content
+  - if (post) {
+    input(type="text")#title
+    div#editor= post.content
+  - } else {
+    input(type="text", placeholder="Post title here")#title
+    div#editor
+  - }
+
+  button.btn.btn-success.btn-lg Save Post
 
 block pagejavascript
   // bower:js
   script(src='/bower_components/medium-editor/dist/js/medium-editor.js')
   script(src='/bower_components/medium-editor-insert-plugin/dist/js/medium-editor-insert-plugin.all.js')
   // endbower
+  script.
+    var editor = new MediumEditor("#editor", {
+      buttons: ['bold', 'italic', 'underline', 'pre', 'image'],
+      placeholder: "Post content here"
+    });
+  -if (post) {
+    script.
+      $('#title').val("#{post.title}");
+  -}
