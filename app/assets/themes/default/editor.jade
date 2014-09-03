@@ -10,7 +10,7 @@ block pagecss
 
 block content
   - if (post) {
-    input(type="text")#title
+    input(type="text", value="#{post.title}")#title
     div#editor= post.content
   - } else {
     input(type="text", placeholder="Post title here")#title
@@ -29,7 +29,3 @@ block pagejavascript
       buttons: ['bold', 'italic', 'underline', 'pre', 'image'],
       placeholder: "Post content here"
     });
-  -if (post) {
-    script.
-      $('#title').val("#{post.title}");
-  -}

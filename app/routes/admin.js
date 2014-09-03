@@ -40,6 +40,7 @@ module.exports = function(db) {
   router.get('/page', auth.ensureAuthenticated, controller.pageDefault);
   router.get('/page/:page', auth.ensureAuthenticated, controller.page);
   router.get('/login', controller.login);
+  router.get('/logout', controller.logout);
   router.post('/login', controller.handleLogin);
 
   router.delete('/post/:id', controller.destroy);

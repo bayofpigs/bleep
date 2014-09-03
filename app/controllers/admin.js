@@ -35,8 +35,17 @@ module.exports = function(db) {
       res.redirect('/admin/page/1');
     },
     login: function(req, res) {
+      if (req.isAuthenticated) {
+        res.redirect('/admin');
+      }
+
       res.render("login");
     },
+    logout: function(req, res) {
+      req.logOut();
+      req.flash('success', 'You have been logged out.');
+      res.redirect("/admin/login");
+    }, 
     handleLogin: function(req, res) {
 
       req.logIn(req.body.password, function(err, result, message) {

@@ -7,8 +7,13 @@ block pagejavascript
   script(src="/js/administration.js")
 
 block content
+  h3 Administration
+  a(href="/admin/logout") Logout 
+  a(href="/admin/settings") Settings
   - if (posts.length == 0) {
-    h4 Looks like there's nothing here :(
+    h4 No posts found.
+    h4 You can create a 
+      a(href="#") new one.
   - }
 
   each post in posts
