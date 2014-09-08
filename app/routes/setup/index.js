@@ -78,13 +78,34 @@ module.exports = function(app, indexRoutes) {
       },
       function addIncrementingCountersToDatabase(callback) {
         var counters = db.collection('counters');
-        counters.insert({_id: "postid", seq: 0}, function(err) {
+
+        async.parallel([
+          function insertPostCounter(cb) {
+            counters.insert({_id: "postid", seq: 0}, function(err) {
+              if (err) {
+                return cb(err);
+              }
+
+              return cb(null);
+            })
+          },
+          function insertCommentCounter(cb) {
+            counters.insert({_id: "commentid", seq: 0}, function(err) {
+              if (err) {
+                return cb(err);
+              }
+
+              return cb(null);
+            })
+          }],
+        function uponCompletion(err) {
           if (err) {
             return callback(err);
           }
 
-          return callback(null);
+          callback(null);
         });
+
       },
       function registerAdminUser(callback) {
         authentication(db).savePassword(req.body.password, function(err) {
@@ -119,7 +140,7 @@ module.exports = function(app, indexRoutes) {
           "To delete this post, find this post under /admin/edit and click DELETE next " +
           "to this post's content. Have fun with your new blog!";
         var comments = [
-          { title: "This is a comment", author: "Bleep", content: "Users can opine here."}
+          { title: "This is a comment", author: "Bleep", content: "Users will opine here."}
         ];
 
         var post = new Post(title, content, comments);

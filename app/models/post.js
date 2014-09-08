@@ -161,10 +161,6 @@ module.exports = function(db) {
     });
   };
 
-  Post.prototype.addComment = function(comment) {
-    this.comments.push(comment);
-  };
-
   Post.prototype.save = function(callback) {
     var posts = db.collection('posts');
     var cur = this;
